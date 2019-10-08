@@ -21,7 +21,8 @@ export default function Dashboard(props) {
 
                         return (
                             <li key={spot._id}>
-                                <header style={{ backgroundImage: `url(${spot.trumbnailImage})` }} />
+                                <img src={spot.thumbnailImage}/>
+                                <header style={{ backgroundImage: `url(${spot.thumbnailImage})` }} />
                                 <strong>{spot.company}</strong>
                                 <span>{spot.price ? `R$${spot.price}` : `Gratuito`}</span>
                             </li>

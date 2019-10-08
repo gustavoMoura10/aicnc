@@ -11,19 +11,21 @@ exports.store = async (req, resp) => {
         const { _id } = req.headers;
         let filename = `default.jpg`
         if(thumbnail.type && thumbnail.data){
-            filename = `${new Date().toTimeString()}.${thumbnail.type.split('/')}`;
+            const file = `${new Date().getTime()}.${thumbnail.type.split('/')[1]}`;
+            const pathFind = path.resolve(__dirname,'..','..','uploads',`${file}`);
             fs.writeFileSync(
-                filename,
+                pathFind,
                 thumbnail.data,
                 'base64'
             )
+            filename = file;
         }
         const user = await User.findById(_id);
         if (!user) {
             throw 'User not Found'
         }
         const spot = await Spot.create({
-            user: id,
+            user: _id,
             thumbnail: filename,
             company,
             techs: techs.split(',').map(tech => tech.trim()),

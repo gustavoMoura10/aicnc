@@ -9,20 +9,30 @@ export default function New(props) {
         return spot.thumbnail ? `data:${spot.thumbnail.type};base64,${spot.thumbnail.data}` : null
     }, [spot.thumbnail])
     async function handleSubmit(event) {
+        const _id = localStorage.getItem('_id')
         event.preventDefault()
-        console.log(spot)
+        const response = await AxiosService.post('/spot', spot, {
+            headers: { _id }
+        })
+        console.log(response)
     }
     async function convertBase64(file) {
         const url = URL.createObjectURL(file);
         const response = await fetch(url);
         const blob = await response.clone().blob();
-        const arrayBuffer = await response.clone().arrayBuffer();
-        const base64 = btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)));
+        const base64 = await ((file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            })
+        })(file);
         setSpot({
             ...spot,
             ['thumbnail']: {
                 type: blob.type,
-                data: base64
+                data: base64.split(',')[1]
             }
         })
     }
