@@ -6,7 +6,7 @@ export default function Dashboard(props) {
     const [spots, setSpots] = useState([]);
     useEffect(() => {
         (async () => {
-            const _id = localStorage.get('_id');
+            const _id = localStorage.getItem('_id');
             const response = await AxiosService.get('/dashboard', {
                 headers: { _id }
             });

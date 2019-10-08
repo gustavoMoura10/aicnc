@@ -3,6 +3,7 @@ const User = require('../models/User');
 exports.store = async (req, resp) => {
     let status = 400;
     try {
+        console.log(req.body)
         const { email } = req.body;
         let user = await User.findOne({email})
         if(!user){

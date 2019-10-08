@@ -7,7 +7,7 @@ exports.show = async (req, resp) => {
         if(!_id){
             throw 'Id Not Found'
         }
-        const spots = await Spot.find({ user: id });
+        const spots = await Spot.find({ user: _id });
         status = 200;
         return resp.status(status).json(spots)
     } catch (error) {

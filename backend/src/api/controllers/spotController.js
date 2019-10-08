@@ -1,14 +1,24 @@
 const Spot = require('../models/Spot');
 const User = require('../models/User');
+const fs = require('fs');
+const path = require('path');
+
 
 exports.store = async (req, resp) => {
     let status = 400;
     try {
-        const { filename } = req.file;
-        const { company, techs, price } = req.body;
-        const { id } = req.params;
-
-        const user = await User.findById(id);
+        const { company, techs, price, thumbnail } = req.body;
+        const { _id } = req.headers;
+        let filename = `default.jpg`
+        if(thumbnail.type && thumbnail.data){
+            filename = `${new Date().toTimeString()}.${thumbnail.type.split('/')}`;
+            fs.writeFileSync(
+                filename,
+                thumbnail.data,
+                'base64'
+            )
+        }
+        const user = await User.findById(_id);
         if (!user) {
             throw 'User not Found'
         }
