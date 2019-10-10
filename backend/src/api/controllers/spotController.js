@@ -5,21 +5,11 @@ const path = require('path');
 
 
 exports.store = async (req, resp) => {
+    const { filename } = req.file
     let status = 400;
     try {
-        const { company, techs, price, thumbnail } = req.body;
+        const { company, techs, price } = req.body;
         const { _id } = req.headers;
-        let filename = `default.jpg`
-        if(thumbnail.type && thumbnail.data){
-            const file = `${new Date().getTime()}.${thumbnail.type.split('/')[1]}`;
-            const pathFind = path.resolve(__dirname,'..','..','uploads',`${file}`);
-            fs.writeFileSync(
-                pathFind,
-                thumbnail.data,
-                'base64'
-            )
-            filename = file;
-        }
         const user = await User.findById(_id);
         if (!user) {
             throw 'User not Found'
